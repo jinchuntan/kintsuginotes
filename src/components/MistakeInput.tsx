@@ -50,7 +50,7 @@ export default function MistakeInputComponent({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="border-zinc-800/50">
+      <Card className="border-zinc-800/50" data-tour-step="input">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-zinc-100">
             <Lightbulb className="h-5 w-5 text-kintsugi-400" />
@@ -68,7 +68,7 @@ export default function MistakeInputComponent({
             <p className="text-xs text-zinc-500 mb-2 uppercase tracking-wider font-medium">
               Try an example
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" data-tour-step="examples">
               {exampleMistakes.map((example) => {
                 const Icon = iconMap[example.icon] || Lightbulb;
                 return (

@@ -15,10 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/workspace", label: "Workspace", icon: PenTool },
-  { href: "/dashboard", label: "Repair Path", icon: LayoutDashboard },
-  { href: "/practice", label: "Practice", icon: Trophy },
-];
+  { href: "/workspace", label: "Workspace", icon: PenTool, tourStep: undefined },
+  { href: "/dashboard", label: "Repair Path", icon: LayoutDashboard, tourStep: "dashboard" },
+  { href: "/practice", label: "Practice", icon: Trophy, tourStep: "practice" },
+] as const;
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -47,6 +47,7 @@ export default function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  data-tour-step={item.tourStep}
                   className={cn(
                     "relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                     isActive

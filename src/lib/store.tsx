@@ -10,7 +10,8 @@ type Action =
   | { type: "UPDATE_REPAIR_STATUS"; id: string; status: RepairAnalysis["repairStatus"]; confidence?: number }
   | { type: "UPDATE_PRACTICE"; repairId: string; progress: PracticeProgress }
   | { type: "LOAD_STATE"; state: AppState }
-  | { type: "REMOVE_REPAIR"; id: string };
+  | { type: "REMOVE_REPAIR"; id: string }
+  | { type: "COMPLETE_ONBOARDING" };
 
 const initialState: AppState = {
   repairs: [],
@@ -18,6 +19,7 @@ const initialState: AppState = {
   practiceProgress: {},
   totalRepaired: 0,
   totalInProgress: 0,
+  hasCompletedOnboarding: false,
 };
 
 function appReducer(state: AppState, action: Action): AppState {
@@ -76,6 +78,8 @@ function appReducer(state: AppState, action: Action): AppState {
         totalInProgress: repairs.filter((r) => r.repairStatus === "repairing").length,
       };
     }
+    case "COMPLETE_ONBOARDING":
+      return { ...state, hasCompletedOnboarding: true };
     case "LOAD_STATE":
       return action.state;
     default:
@@ -91,6 +95,7 @@ interface AppContextType {
   updateRepairStatus: (id: string, status: RepairAnalysis["repairStatus"], confidence?: number) => void;
   updatePractice: (repairId: string, progress: PracticeProgress) => void;
   removeRepair: (id: string) => void;
+  completeOnboarding: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -121,12 +126,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         practiceProgress: state.practiceProgress,
         totalRepaired: state.totalRepaired,
         totalInProgress: state.totalInProgress,
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
     } catch {
       // Ignore storage errors
     }
-  }, [state.repairs, state.practiceProgress, state.totalRepaired, state.totalInProgress]);
+  }, [state.repairs, state.practiceProgress, state.totalRepaired, state.totalInProgress, state.hasCompletedOnboarding]);
 
   const addRepair = (repair: RepairAnalysis) =>
     dispatch({ type: "ADD_REPAIR", repair });
@@ -140,9 +146,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const removeRepair = (id: string) =>
     dispatch({ type: "REMOVE_REPAIR", id });
 
+  const completeOnboarding = () =>
+    dispatch({ type: "COMPLETE_ONBOARDING" });
+
   return (
     <AppContext.Provider
-      value={{ state, dispatch, addRepair, updateRepairStatus, updatePractice, removeRepair }}
+      value={{ state, dispatch, addRepair, updateRepairStatus, updatePractice, removeRepair, completeOnboarding }}
     >
       {children}
     </AppContext.Provider>

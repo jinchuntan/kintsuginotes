@@ -10,16 +10,39 @@ import RepairAnalysisComponent from "@/components/RepairAnalysis";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import Reflection from "@/components/Reflection";
 import KintsugiCard from "@/components/KintsugiCard";
+import OnboardingWelcome from "@/components/OnboardingWelcome";
+import OnboardingTour from "@/components/OnboardingTour";
 import { useAppState } from "@/lib/store";
 import { MistakeInput as MistakeInputType, RepairAnalysis } from "@/lib/types";
 import { Sparkles, History } from "lucide-react";
 
 export default function WorkspacePage() {
   const router = useRouter();
-  const { state, addRepair, updateRepairStatus } = useAppState();
+  const { state, addRepair, updateRepairStatus, completeOnboarding } = useAppState();
   const [isLoading, setIsLoading] = useState(false);
   const [currentAnalysis, setCurrentAnalysis] = useState<RepairAnalysis | null>(null);
   const analysisRef = useRef<HTMLDivElement>(null);
+
+  // Onboarding state
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [showTour, setShowTour] = useState(false);
+  const needsOnboarding = !state.hasCompletedOnboarding;
+
+  const handleStartTour = () => {
+    setShowWelcome(false);
+    setShowTour(true);
+  };
+
+  const handleSkipOnboarding = () => {
+    setShowWelcome(false);
+    setShowTour(false);
+    completeOnboarding();
+  };
+
+  const handleTourComplete = () => {
+    setShowTour(false);
+    completeOnboarding();
+  };
 
   const handleSubmit = async (input: MistakeInputType) => {
     setIsLoading(true);
@@ -81,6 +104,19 @@ export default function WorkspacePage() {
   return (
     <div className="min-h-screen bg-zinc-950">
       <Navigation />
+
+      {/* Onboarding */}
+      <AnimatePresence>
+        {needsOnboarding && showWelcome && (
+          <OnboardingWelcome
+            onGetStarted={handleStartTour}
+            onSkip={handleSkipOnboarding}
+          />
+        )}
+      </AnimatePresence>
+      {needsOnboarding && showTour && (
+        <OnboardingTour onComplete={handleTourComplete} />
+      )}
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">

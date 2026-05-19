@@ -48,6 +48,7 @@ export interface AppState {
   practiceProgress: Record<string, PracticeProgress>;
   totalRepaired: number;
   totalInProgress: number;
+  hasCompletedOnboarding: boolean;
 }
 
 // Preloaded example type
