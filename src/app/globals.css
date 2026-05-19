@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 6% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 6% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 30 45% 64%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 30 45% 64%;
+    --gold: 30 45% 64%;
+    --gold-light: 43 88% 74%;
+    --gold-glow: 45 90% 61%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Kintsugi crack pattern overlay */
+  .kintsugi-crack {
+    position: relative;
+  }
+
+  .kintsugi-crack::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      transparent 30%,
+      rgba(212, 165, 116, 0.08) 30.5%,
+      rgba(212, 165, 116, 0.08) 31%,
+      transparent 31.5%,
+      transparent 60%,
+      rgba(212, 165, 116, 0.06) 60.5%,
+      rgba(212, 165, 116, 0.06) 61%,
+      transparent 61.5%
+    );
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* Gold glow effect */
+  .gold-glow {
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.15),
+                0 0 40px rgba(212, 165, 116, 0.05);
+  }
+
+  .gold-glow-strong {
+    box-shadow: 0 0 20px rgba(245, 200, 66, 0.3),
+                0 0 40px rgba(245, 200, 66, 0.15),
+                0 0 60px rgba(245, 200, 66, 0.05);
+  }
+
+  /* Gold text gradient */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #b8860b, #d4a574, #f5c842);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gold border gradient */
+  .border-gold-gradient {
+    border-image: linear-gradient(135deg, #b8860b, #d4a574, #f5c842) 1;
+  }
+
+  /* Shimmer loading animation */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(212, 165, 116, 0.05) 25%,
+      rgba(212, 165, 116, 0.15) 50%,
+      rgba(212, 165, 116, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Crack line decorative element */
+  .crack-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212, 165, 116, 0.6),
+      rgba(245, 200, 66, 0.8),
+      rgba(212, 165, 116, 0.6),
+      transparent
+    );
+    height: 1px;
+  }
+
+  /* Repaired card glow animation */
+  .repaired-glow {
+    animation: repairedGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes repairedGlow {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(245, 200, 66, 0.1),
+                  inset 0 0 15px rgba(245, 200, 66, 0.03);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(245, 200, 66, 0.2),
+                  inset 0 0 25px rgba(245, 200, 66, 0.05);
+    }
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(212, 165, 116, 0.3);
+  color: white;
+}
